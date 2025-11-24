@@ -1,0 +1,50 @@
+{% extends "emails/base_email.html" %}
+
+{% block title %}Welcome to CleanTrack!{% endblock %}
+
+{% block content %}
+<h2>Welcome to CleanTrack! 👋</h2>
+
+<p>Hi {{ user_name }},</p>
+
+<p>Thank you for choosing CleanTrack! We're excited to help you streamline your medical equipment cleaning compliance.</p>
+
+<div class="success-box">
+    <strong>Your Account is Active</strong><br>
+    Organization: {{ account_name }}<br>
+    Plan: {{ plan_name }}<br>
+    Subscription Valid Until: {{ subscription_end_date }}
+</div>
+
+<h3>Get Started in 3 Easy Steps:</h3>
+
+<ol>
+    <li><strong>Add Your First Location</strong> - Set up your facility locations</li>
+    <li><strong>Register Equipment</strong> - Add the medical equipment you need to track</li>
+    <li><strong>Start Logging Cleanings</strong> - Record your first cleaning activity</li>
+</ol>
+
+<a href="{{ dashboard_url }}" class="button">Go to Dashboard</a>
+
+<div class="divider"></div>
+
+<h3>Your Plan Includes:</h3>
+<ul>
+    <li>✓ Up to {{ max_locations }} locations</li>
+    <li>✓ Up to {{ max_users }} team members</li>
+    <li>✓ Unlimited equipment tracking</li>
+    <li>✓ Automated compliance alerts</li>
+    <li>✓ Audit-ready reports</li>
+    <li>✓ Email support</li>
+</ul>
+
+<div class="info-box">
+    <strong>Need Help Getting Started?</strong><br>
+    Check out our <a href="{{ help_url }}">Quick Start Guide</a> or reply to this email with any questions.
+</div>
+
+<p>We're here to help you maintain compliance and protect your patients.</p>
+
+<p>Best regards,<br>
+The CleanTrack Team</p>
+{% endblock %}

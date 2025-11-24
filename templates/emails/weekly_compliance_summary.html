@@ -1,0 +1,96 @@
+{% extends "emails/base_email.html" %}
+
+{% block title %}Weekly Compliance Summary{% endblock %}
+
+{% block content %}
+<h2>📊 Weekly Compliance Summary</h2>
+
+<p>Hi {{ user_name }},</p>
+
+<p>Here's your weekly compliance summary for {{ account_name }}.</p>
+
+<div class="info-box">
+    <strong>Reporting Period</strong><br>
+    {{ start_date }} to {{ end_date }}
+</div>
+
+<h3>Overview</h3>
+
+<table style="width: 100%; border-collapse: collapse; margin: 20px 0;">
+    <tr style="background-color: #f9fafb;">
+        <th style="padding: 12px; text-align: left; border-bottom: 2px solid #e5e7eb;">Metric</th>
+        <th style="padding: 12px; text-align: right; border-bottom: 2px solid #e5e7eb;">Count</th>
+    </tr>
+    <tr>
+        <td style="padding: 12px; border-bottom: 1px solid #e5e7eb;">Total Equipment</td>
+        <td style="padding: 12px; text-align: right; border-bottom: 1px solid #e5e7eb; font-weight: 600;">{{ total_equipment }}</td>
+    </tr>
+    <tr>
+        <td style="padding: 12px; border-bottom: 1px solid #e5e7eb;">Cleanings Completed</td>
+        <td style="padding: 12px; text-align: right; border-bottom: 1px solid #e5e7eb; font-weight: 600; color: #10b981;">{{ cleanings_completed }}</td>
+    </tr>
+    <tr>
+        <td style="padding: 12px; border-bottom: 1px solid #e5e7eb;">Active Alerts</td>
+        <td style="padding: 12px; text-align: right; border-bottom: 1px solid #e5e7eb; font-weight: 600; color: {% if active_alerts > 0 %}#f59e0b{% else %}#10b981{% endif %};">{{ active_alerts }}</td>
+    </tr>
+    <tr style="background-color: #f9fafb;">
+        <td style="padding: 12px; font-weight: 600;">Compliance Rate</td>
+        <td style="padding: 12px; text-align: right; font-weight: 600; font-size: 18px; color: {% if compliance_rate >= 90 %}#10b981{% elif compliance_rate >= 75 %}#f59e0b{% else %}#ef4444{% endif %};">{{ compliance_rate }}%</td>
+    </tr>
+</table>
+
+{% if compliance_rate >= 90 %}
+<div class="success-box">
+    <strong>Excellent Work! ✓</strong><br>
+    Your team is maintaining outstanding compliance levels. Keep up the great work!
+</div>
+{% elif compliance_rate >= 75 %}
+<div class="warning-box">
+    <strong>Good Progress ⚠</strong><br>
+    Your compliance rate is solid, but there's room for improvement. Check active alerts for items needing attention.
+</div>
+{% else %}
+<div class="warning-box" style="background-color: #fee2e2; border-color: #ef4444;">
+    <strong>Action Needed ✗</strong><br>
+    Your compliance rate is below target. Immediate action is required to address overdue cleanings.
+</div>
+{% endif %}
+
+<h3>Top Locations</h3>
+<ul>
+    {% for location in top_locations %}
+    <li><strong>{{ location.name }}</strong>: {{ location.compliance_rate }}% compliance ({{ location.cleanings }} cleanings)</li>
+    {% endfor %}
+</ul>
+
+{% if active_alerts > 0 %}
+<h3>Active Alerts Requiring Attention</h3>
+<ul>
+    {% for alert in alerts %}
+    <li><strong>{{ alert.equipment_name }}</strong>: {{ alert.type }} ({{ alert.severity }})</li>
+    {% endfor %}
+</ul>
+{% endif %}
+
+<a href="{{ dashboard_url }}" class="button">View Full Dashboard</a>
+
+<div class="divider"></div>
+
+<h3>Recommendations</h3>
+<ul>
+    <li>Review and resolve all active alerts</li>
+    <li>Ensure all technicians are logging cleanings promptly</li>
+    <li>Schedule equipment with approaching due dates</li>
+    <li>Update any equipment that's been retired or relocated</li>
+</ul>
+
+<p>Keep up the great work maintaining compliance and protecting patient safety!</p>
+
+<p>Best regards,<br>
+The CleanTrack Team</p>
+
+<p style="font-size: 12px; color: #6b7280; margin-top: 30px;">
+    Report Generated: {{ timestamp }}<br>
+    <a href="{{ report_download_url }}">Download Full Report (PDF)</a>
+</p>
+{% endblock %}

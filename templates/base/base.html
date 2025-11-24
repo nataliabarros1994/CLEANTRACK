@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes">
+    <meta name="description" content="CleanTrack - Sistema de Gestão de Limpeza de Equipamentos Médicos">
+    <meta name="theme-color" content="#4F46E5">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+
+    <title>{% block title %}CleanTrack{% endblock %}</title>
+
+    <!-- Tailwind CSS CDN for quick responsive styling -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="{% static 'css/responsive.css' %}">
+
+    <!-- Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+        /* Custom responsive styles */
+        :root {
+            --primary-color: #4F46E5;
+            --primary-dark: #4338CA;
+            --success-color: #10B981;
+            --danger-color: #EF4444;
+            --warning-color: #F59E0B;
+            --text-dark: #1F2937;
+            --text-light: #6B7280;
+            --bg-light: #F9FAFB;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        /* Mobile-first responsive utilities */
+        .container-responsive {
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 1rem;
+        }
+
+        @media (min-width: 640px) {
+            .container-responsive {
+                padding: 0 2rem;
+            }
+        }
+
+        /* Touch-friendly buttons */
+        .btn-touch {
+            min-height: 44px;
+            min-width: 44px;
+            padding: 0.75rem 1.5rem;
+            font-size: 1rem;
+            border-radius: 0.5rem;
+            transition: all 0.2s;
+        }
+
+        .btn-touch:active {
+            transform: scale(0.98);
+        }
+
+        /* Responsive navigation */
+        .nav-mobile {
+            display: block;
+        }
+
+        @media (min-width: 768px) {
+            .nav-mobile {
+                display: none;
+            }
+        }
+
+        /* Card responsive */
+        .card-responsive {
+            background: white;
+            border-radius: 1rem;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+            padding: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        @media (min-width: 640px) {
+            .card-responsive {
+                padding: 1.5rem;
+            }
+        }
+
+        /* QR Code responsive */
+        .qr-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 1rem;
+        }
+
+        .qr-container img {
+            max-width: 100%;
+            height: auto;
+            max-height: 300px;
+        }
+
+        @media (min-width: 640px) {
+            .qr-container img {
+                max-height: 400px;
+            }
+        }
+
+        /* Form responsive */
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+            color: var(--text-dark);
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 0.75rem;
+            border: 1px solid #D1D5DB;
+            border-radius: 0.5rem;
+            font-size: 1rem;
+            transition: border-color 0.2s;
+        }
+
+        .form-input:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.1);
+        }
+
+        /* Photo upload preview */
+        .photo-preview {
+            max-width: 100%;
+            height: auto;
+            border-radius: 0.5rem;
+            margin-top: 1rem;
+        }
+
+        /* Loading spinner */
+        .spinner {
+            border: 3px solid #f3f3f3;
+            border-top: 3px solid var(--primary-color);
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Success/Error messages */
+        .alert {
+            padding: 1rem;
+            border-radius: 0.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .alert-success {
+            background-color: #D1FAE5;
+            color: #065F46;
+            border: 1px solid #10B981;
+        }
+
+        .alert-error {
+            background-color: #FEE2E2;
+            color: #991B1B;
+            border: 1px solid #EF4444;
+        }
+
+        .alert-warning {
+            background-color: #FEF3C7;
+            color: #92400E;
+            border: 1px solid #F59E0B;
+        }
+    </style>
+
+    {% block extra_css %}{% endblock %}
+</head>
+<body class="bg-gray-50">
+    <!-- Mobile Header -->
+    <header class="bg-white shadow-sm sticky top-0 z-50">
+        <div class="container-responsive">
+            <div class="flex items-center justify-between h-16">
+                <!-- Logo -->
+                <div class="flex items-center">
+                    <i class="fas fa-hospital-alt text-2xl text-indigo-600 mr-2"></i>
+                    <span class="font-bold text-xl text-gray-900">CleanTrack</span>
+                </div>
+
+                <!-- Mobile menu button -->
+                <button id="mobile-menu-button" class="nav-mobile text-gray-600 hover:text-gray-900 focus:outline-none">
+                    <i class="fas fa-bars text-2xl"></i>
+                </button>
+
+                <!-- Desktop navigation -->
+                <nav class="hidden md:flex space-x-4">
+                    {% if user.is_authenticated %}
+                        <a href="{% url 'admin:index' %}" class="text-gray-600 hover:text-indigo-600 px-3 py-2 rounded-md">
+                            <i class="fas fa-tachometer-alt mr-1"></i> Dashboard
+                        </a>
+                        <a href="{% url 'admin:logout' %}" class="text-gray-600 hover:text-red-600 px-3 py-2 rounded-md">
+                            <i class="fas fa-sign-out-alt mr-1"></i> Sair
+                        </a>
+                    {% else %}
+                        <a href="{% url 'admin:login' %}" class="text-gray-600 hover:text-indigo-600 px-3 py-2 rounded-md">
+                            <i class="fas fa-sign-in-alt mr-1"></i> Login
+                        </a>
+                    {% endif %}
+                </nav>
+            </div>
+        </div>
+
+        <!-- Mobile menu (hidden by default) -->
+        <div id="mobile-menu" class="hidden md:hidden border-t border-gray-200">
+            <div class="px-2 pt-2 pb-3 space-y-1">
+                {% if user.is_authenticated %}
+                    <a href="{% url 'admin:index' %}" class="block px-3 py-2 rounded-md text-gray-600 hover:bg-gray-100">
+                        <i class="fas fa-tachometer-alt mr-2"></i> Dashboard
+                    </a>
+                    <a href="{% url 'admin:logout' %}" class="block px-3 py-2 rounded-md text-red-600 hover:bg-red-50">
+                        <i class="fas fa-sign-out-alt mr-2"></i> Sair
+                    </a>
+                {% else %}
+                    <a href="{% url 'admin:login' %}" class="block px-3 py-2 rounded-md text-gray-600 hover:bg-gray-100">
+                        <i class="fas fa-sign-in-alt mr-2"></i> Login
+                    </a>
+                {% endif %}
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="min-h-screen py-6">
+        <div class="container-responsive">
+            {% block content %}{% endblock %}
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-white border-t border-gray-200 mt-12">
+        <div class="container-responsive py-6">
+            <div class="text-center text-gray-600 text-sm">
+                <p>&copy; 2025 CleanTrack. Sistema de Gestão de Limpeza de Equipamentos Médicos.</p>
+                <p class="mt-2">
+                    <i class="fas fa-shield-alt text-green-600"></i>
+                    <span class="font-semibold">Seguro e Confiável</span>
+                </p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script>
+        // Mobile menu toggle
+        const mobileMenuButton = document.getElementById('mobile-menu-button');
+        const mobileMenu = document.getElementById('mobile-menu');
+
+        if (mobileMenuButton && mobileMenu) {
+            mobileMenuButton.addEventListener('click', () => {
+                mobileMenu.classList.toggle('hidden');
+            });
+        }
+
+        // Photo preview
+        function previewPhoto(input) {
+            if (input.files && input.files[0]) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    const preview = document.getElementById('photo-preview');
+                    if (preview) {
+                        preview.src = e.target.result;
+                        preview.style.display = 'block';
+                    }
+                }
+                reader.readAsDataURL(input.files[0]);
+            }
+        }
+
+        // Form validation
+        function validateForm(formId) {
+            const form = document.getElementById(formId);
+            if (!form) return true;
+
+            const requiredFields = form.querySelectorAll('[required]');
+            let isValid = true;
+
+            requiredFields.forEach(field => {
+                if (!field.value.trim()) {
+                    field.classList.add('border-red-500');
+                    isValid = false;
+                } else {
+                    field.classList.remove('border-red-500');
+                }
+            });
+
+            return isValid;
+        }
+    </script>
+
+    {% block extra_js %}{% endblock %}
+</body>
+</html>

@@ -1,0 +1,202 @@
+═══════════════════════════════════════════════════════════════
+                    CLEANTRACK - LINKS DE ACESSO
+═══════════════════════════════════════════════════════════════
+
+📍 LOCALIZAÇÃO DO PROJETO:
+   /home/nataliabarros1994/Desktop/CleanTrack
+
+═══════════════════════════════════════════════════════════════
+                    🚀 COMO INICIAR O PROJETO
+═══════════════════════════════════════════════════════════════
+
+OPÇÃO 1: DOCKER (RECOMENDADO)
+------------------------------
+1. Abra um terminal
+2. Navegue até a pasta:
+   cd /home/nataliabarros1994/Desktop/CleanTrack
+
+3. Inicie o Docker:
+   docker-compose up --build
+
+4. Em OUTRO terminal, execute:
+   docker-compose exec web python manage.py migrate
+   docker-compose exec web python manage.py createsuperuser
+   docker-compose exec web python manage.py create_demo_data
+
+5. PRONTO! Acesse os links abaixo ⬇️
+
+
+OPÇÃO 2: SEM DOCKER
+-------------------
+1. Execute:
+   cd /home/nataliabarros1994/Desktop/CleanTrack
+   ./setup.sh
+   source venv/bin/activate
+   python manage.py runserver
+
+2. Acesse os links abaixo ⬇️
+
+═══════════════════════════════════════════════════════════════
+                    🌐 LINKS PARA ACESSAR
+═══════════════════════════════════════════════════════════════
+
+🏠 PÁGINA INICIAL:
+   http://localhost:8000
+
+   → Landing page do CleanTrack
+   → Interface pública
+
+
+🔐 PAINEL ADMINISTRATIVO:
+   http://localhost:8000/admin
+
+   → Login com superusuário
+   → Gerenciar todos os dados
+   → Ver equipamentos, limpezas, alertas
+
+
+👤 AUTENTICAÇÃO:
+   • Login:  http://localhost:8000/accounts/login/
+   • Signup: http://localhost:8000/accounts/signup/
+   • Logout: http://localhost:8000/accounts/logout/
+
+
+📨 WEBHOOK STRIPE:
+   http://localhost:8000/billing/webhooks/stripe/
+
+   → Endpoint para webhooks do Stripe
+   → Processa eventos de pagamento
+
+
+💳 STRIPE (DJ-STRIPE):
+   http://localhost:8000/stripe/
+
+   → Interface do dj-stripe
+
+═══════════════════════════════════════════════════════════════
+                    👤 CREDENCIAIS DE ACESSO
+═══════════════════════════════════════════════════════════════
+
+SUPERUSUÁRIO (você vai criar):
+   Email: [definido por você]
+   Senha: [definida por você]
+
+
+USUÁRIOS DEMO (após executar create_demo_data):
+
+   Administrador:
+   Email: demo.admin@cleantrack.app
+   Senha: demo123
+
+   Técnico:
+   Email: demo.technician@cleantrack.app
+   Senha: demo123
+
+═══════════════════════════════════════════════════════════════
+                    📱 ACESSAR DE OUTROS DISPOSITIVOS
+═══════════════════════════════════════════════════════════════
+
+1. Descubra seu IP local:
+   hostname -I
+
+2. Adicione ao .env:
+   ALLOWED_HOSTS=localhost,127.0.0.1,[SEU_IP]
+
+3. Reinicie:
+   docker-compose restart web
+
+4. Acesse de outro dispositivo:
+   http://[SEU_IP]:8000
+
+═══════════════════════════════════════════════════════════════
+                    🎯 PRIMEIROS PASSOS
+═══════════════════════════════════════════════════════════════
+
+1. Acesse: http://localhost:8000/admin
+
+2. Faça login com suas credenciais
+
+3. Explore:
+   • Accounts → Ver contas e usuários
+   • Equipment → Ver equipamentos
+   • Compliance → Ver logs de limpeza e alertas
+
+4. Teste o sistema:
+   • Adicione um equipamento
+   • Registre uma limpeza
+   • Veja os alertas gerados
+
+═══════════════════════════════════════════════════════════════
+                    🛠️ COMANDOS ÚTEIS
+═══════════════════════════════════════════════════════════════
+
+INICIAR PROJETO:
+   docker-compose up
+
+VER LOGS:
+   docker-compose logs -f web
+
+PARAR PROJETO:
+   docker-compose down
+
+EXECUTAR COMANDOS DJANGO:
+   docker-compose exec web python manage.py [comando]
+
+SHELL DJANGO:
+   docker-compose exec web python manage.py shell
+
+CRIAR DADOS DEMO:
+   docker-compose exec web python manage.py create_demo_data
+
+═══════════════════════════════════════════════════════════════
+                    📚 DOCUMENTAÇÃO
+═══════════════════════════════════════════════════════════════
+
+Leia os seguintes arquivos no projeto:
+
+   📖 ACESSO_RAPIDO.md      - Guia completo de acesso (ESTE)
+   📖 LEIAME_PT.md          - Documentação em Português
+   📖 README.md             - Documentação Técnica
+   📖 QUICKSTART.md         - Início Rápido
+   📖 INTEGRATION_EXAMPLES.md - Exemplos Stripe & Resend
+
+═══════════════════════════════════════════════════════════════
+                    ✅ CHECKLIST
+═══════════════════════════════════════════════════════════════
+
+[ ] Docker está instalado e rodando
+[ ] Executei: docker-compose up --build
+[ ] Executei: docker-compose exec web python manage.py migrate
+[ ] Criei superusuário com: docker-compose exec web python manage.py createsuperuser
+[ ] (Opcional) Criei dados demo: docker-compose exec web python manage.py create_demo_data
+[ ] Acesso http://localhost:8000 no navegador
+[ ] Acesso http://localhost:8000/admin no navegador
+[ ] Faço login com minhas credenciais
+[ ] Vejo os dados de demonstração
+
+═══════════════════════════════════════════════════════════════
+                    🆘 PROBLEMAS?
+═══════════════════════════════════════════════════════════════
+
+PORTA JÁ EM USO:
+   sudo lsof -ti:8000 | xargs kill -9
+   docker-compose up
+
+ERRO DE BANCO DE DADOS:
+   docker-compose down -v
+   docker-compose up --build
+   docker-compose exec web python manage.py migrate
+
+REINSTALAR TUDO:
+   docker-compose down -v
+   docker-compose build --no-cache
+   docker-compose up
+
+═══════════════════════════════════════════════════════════════
+
+✨ PRONTO PARA COMEÇAR!
+
+Execute: docker-compose up
+Acesse: http://localhost:8000
+
+═══════════════════════════════════════════════════════════════

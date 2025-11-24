@@ -1,0 +1,59 @@
+{% extends "emails/base_email.html" %}
+
+{% block title %}Payment Failed - Action Required{% endblock %}
+
+{% block content %}
+<h2>Payment Failed - Action Required</h2>
+
+<p>Hi {{ user_name }},</p>
+
+<p>We were unable to process your payment for CleanTrack.</p>
+
+<div class="warning-box">
+    <strong>Payment Details</strong><br>
+    Amount Due: ${{ amount_due }}<br>
+    Organization: {{ account_name }}<br>
+    Plan: {{ plan_name }}<br>
+    {% if next_attempt_date %}
+    Next Retry: {{ next_attempt_date }}<br>
+    {% endif %}
+</div>
+
+<h3>What This Means:</h3>
+<p>Your CleanTrack account has been temporarily suspended. You'll lose access to:</p>
+<ul>
+    <li>Equipment tracking dashboard</li>
+    <li>Cleaning log management</li>
+    <li>Compliance alerts</li>
+    <li>Audit reports</li>
+</ul>
+
+<h3>How to Restore Access:</h3>
+<p>Update your payment method to reactivate your account immediately.</p>
+
+<a href="{{ payment_update_url }}" class="button">Update Payment Method</a>
+
+<div class="divider"></div>
+
+<div class="info-box">
+    <strong>Common Payment Issues:</strong><br>
+    • Expired credit card<br>
+    • Insufficient funds<br>
+    • Card declined by bank<br>
+    • Incorrect billing information<br>
+    <br>
+    If you continue to experience issues, please contact your bank or <a href="{{ support_url }}">contact our support team</a>.
+</div>
+
+<p>We understand payment issues happen. We're here to help resolve this quickly so you can continue using CleanTrack without interruption.</p>
+
+<p>If you have any questions or need assistance, please don't hesitate to reach out.</p>
+
+<p>Best regards,<br>
+The CleanTrack Team</p>
+
+<p style="font-size: 12px; color: #6b7280; margin-top: 30px;">
+    Invoice ID: {{ invoice_id }}<br>
+    Date: {{ timestamp }}
+</p>
+{% endblock %}

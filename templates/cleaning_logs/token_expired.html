@@ -1,0 +1,53 @@
+<!-- templates/cleaning_logs/token_expired.html -->
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Token Expirado</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <style>
+    body { background: #f8f9fa; padding: 20px; }
+    .card { max-width: 500px; margin: 0 auto; }
+    .icon { font-size: 64px; }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <div class="card-header bg-danger text-white text-center">
+      <h4>⏱️ {{ error }}</h4>
+    </div>
+    <div class="card-body text-center">
+      <div class="icon mb-3">🔒</div>
+
+      <h5 class="mb-3">{{ message }}</h5>
+
+      {% if expiry_info %}
+      <div class="alert alert-info">
+        <p class="mb-2"><strong>Informações do Token:</strong></p>
+        <p class="mb-1">⏰ Expirou em: {{ expiry_info.expires_at }}</p>
+        <p class="mb-0">
+          {% if expiry_info.is_expired %}
+            ❌ Status: <strong>Expirado há {{ expiry_info.minutes_remaining|floatformat:0|abs }} minuto(s)</strong>
+          {% else %}
+            ✅ Status: <strong>Ainda válido por {{ expiry_info.minutes_remaining|floatformat:0 }} minuto(s)</strong>
+          {% endif %}
+        </p>
+      </div>
+      {% endif %}
+
+      <div class="alert alert-warning mt-4">
+        <strong>📱 O que fazer?</strong>
+        <p class="mb-0">Solicite um novo link temporário ao administrador do sistema.</p>
+      </div>
+
+      <div class="mt-4">
+        <p class="text-muted small">
+          <strong>Nota:</strong> Links temporários são válidos por apenas 5 minutos por segurança.
+          Para acesso permanente, use o QR Code fixado no equipamento.
+        </p>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

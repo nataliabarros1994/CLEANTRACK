@@ -1,0 +1,170 @@
+# =============================================================================
+# Render.com Blueprint para CleanTrack
+# =============================================================================
+# Deploy 1-clique: https://render.com/docs/blueprint-spec
+#
+# Como usar:
+# 1. Faça push deste arquivo para o GitHub
+# 2. No Render Dashboard: New > Blueprint
+# 3. Conecte ao repositório
+# 4. Render criará automaticamente database + web service
+# 5. Configure as variáveis secretas manualmente no dashboard
+# =============================================================================
+
+databases:
+  - name: cleantrack-db
+    databaseName: cleantrack_production
+    user: cleantrack_user
+    region: oregon
+    plan: free  # Free tier: 90 dias grátis, depois $7/mês
+    # Upgrade plans: starter ($7/mo), standard ($50/mo), pro ($400/mo)
+
+services:
+  - type: web
+    name: cleantrack-api
+    runtime: python
+    region: oregon
+    plan: free  # Free tier com limitações (sleep após inatividade)
+    # Upgrade para starter ($7/mo) para produção real
+    env: python
+
+    # Build configuration
+    buildCommand: |
+      pip install -r requirements.txt &&
+      python manage.py collectstatic --noinput &&
+      python manage.py migrate
+
+    startCommand: "gunicorn cleantrack.wsgi:application --bind 0.0.0.0:$PORT --workers 2 --timeout 60"
+
+    # Health check
+    healthCheckPath: /admin/login/
+
+    # Environment Variables
+    envVars:
+      # Python version
+      - key: PYTHON_VERSION
+        value: "3.11.0"
+
+      # Database (auto-populated by Render)
+      - key: DATABASE_URL
+        fromDatabase:
+          name: cleantrack-db
+          property: connectionString
+
+      # Django Core
+      - key: DEBUG
+        value: "False"
+
+      - key: SECRET_KEY
+        generateValue: true  # Render gera automaticamente
+
+      - key: ALLOWED_HOSTS
+        value: ".onrender.com"  # Substitua pelo seu domínio depois
+
+      - key: CSRF_TRUSTED_ORIGINS
+        value: "https://*.onrender.com"  # Substitua pelo seu domínio depois
+
+      - key: SITE_URL
+        value: "https://cleantrack-api.onrender.com"  # Atualize com seu domínio
+
+      # Security Settings
+      - key: SECURE_SSL_REDIRECT
+        value: "True"
+
+      - key: SESSION_COOKIE_SECURE
+        value: "True"
+
+      - key: CSRF_COOKIE_SECURE
+        value: "True"
+
+      # Email (Resend) - CONFIGURE MANUALMENTE NO DASHBOARD
+      - key: RESEND_API_KEY
+        sync: false  # Defina no dashboard: re_xxxxx
+
+      - key: DEFAULT_FROM_EMAIL
+        value: "contato@cleantrack.com"
+
+      - key: SERVER_EMAIL
+        value: "noreply@cleantrack.com"
+
+      # Stripe (Pagamentos) - CONFIGURE MANUALMENTE NO DASHBOARD
+      - key: STRIPE_PUBLIC_KEY
+        sync: false  # pk_live_xxxxx (ou pk_test_xxxxx para teste)
+
+      - key: STRIPE_SECRET_KEY
+        sync: false  # sk_live_xxxxx (ou sk_test_xxxxx para teste)
+
+      - key: STRIPE_WEBHOOK_SECRET
+        sync: false  # whsec_xxxxx
+
+      - key: DJSTRIPE_WEBHOOK_VALIDATION
+        value: "verify_signature"
+
+      # Locale
+      - key: LANGUAGE_CODE
+        value: "pt-br"
+
+      - key: TIME_ZONE
+        value: "America/Sao_Paulo"
+
+      # Sites Framework
+      - key: SITE_ID
+        value: "1"
+
+      # Monitoring (opcional)
+      # - key: SENTRY_DSN
+      #   sync: false  # https://xxxxx@sentry.io/xxxxx
+
+    # Disco persistente para uploads (opcional, mas recomendado)
+    disk:
+      name: cleantrack-media
+      mountPath: /opt/render/project/src/media
+      sizeGB: 1  # 1 GB grátis
+
+# =============================================================================
+# Serviços Opcionais (descomente quando precisar)
+# =============================================================================
+
+# Redis para cache e sessões
+# - type: redis
+#   name: cleantrack-redis
+#   region: oregon
+#   plan: free  # 25 MB grátis
+#   maxmemoryPolicy: allkeys-lru
+#   ipAllowList: []  # Permitir todas as IPs (default)
+
+# Worker para tarefas assíncronas (Celery)
+# - type: worker
+#   name: cleantrack-worker
+#   runtime: python
+#   region: oregon
+#   plan: free
+#   env: python
+#   buildCommand: "pip install -r requirements.txt"
+#   startCommand: "celery -A cleantrack worker -l info"
+#   envVars:
+#     - key: DATABASE_URL
+#       fromDatabase:
+#         name: cleantrack-db
+#         property: connectionString
+#     - key: REDIS_URL
+#       fromService:
+#         type: redis
+#         name: cleantrack-redis
+#         property: connectionString
+
+# Cron job para tarefas agendadas
+# - type: cron
+#   name: cleantrack-scheduler
+#   runtime: python
+#   region: oregon
+#   plan: free
+#   env: python
+#   buildCommand: "pip install -r requirements.txt"
+#   schedule: "0 2 * * *"  # Todo dia às 2h AM
+#   startCommand: "python manage.py send_compliance_reminders"
+#   envVars:
+#     - key: DATABASE_URL
+#       fromDatabase:
+#         name: cleantrack-db
+#         property: connectionString

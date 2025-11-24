@@ -1,0 +1,352 @@
+
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>QR Codes - Tokens Permanentes - CleanTrack</title>
+    <style>
+        @page {
+            size: A4;
+            margin: 20mm;
+        }
+
+        @media print {
+            .no-print {
+                display: none;
+            }
+            .page-break {
+                page-break-after: always;
+            }
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background: #f5f5f5;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+            padding: 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border-radius: 10px;
+        }
+
+        .qr-card {
+            background: white;
+            border: 3px solid #333;
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 30px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            text-align: center;
+        }
+
+        .qr-card h2 {
+            color: #667eea;
+            margin: 0 0 10px 0;
+            font-size: 24px;
+        }
+
+        .qr-card .facility {
+            color: #666;
+            font-size: 14px;
+            margin-bottom: 20px;
+        }
+
+        .qr-card img {
+            width: 300px;
+            height: 300px;
+            border: 2px solid #ddd;
+            border-radius: 5px;
+            margin: 20px auto;
+        }
+
+        .info-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            margin-top: 20px;
+            text-align: left;
+        }
+
+        .info-item {
+            background: #f8f9fa;
+            padding: 10px;
+            border-radius: 5px;
+            font-size: 12px;
+        }
+
+        .info-item strong {
+            color: #667eea;
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        .token-display {
+            background: #fff3cd;
+            border: 2px dashed #ffc107;
+            padding: 15px;
+            border-radius: 5px;
+            margin-top: 20px;
+            font-family: monospace;
+            word-break: break-all;
+            font-size: 14px;
+        }
+
+        .instructions {
+            background: #e7f3ff;
+            border-left: 4px solid #2196F3;
+            padding: 20px;
+            margin-bottom: 30px;
+            border-radius: 5px;
+        }
+
+        .instructions h3 {
+            margin-top: 0;
+            color: #2196F3;
+        }
+
+        .instructions ol {
+            margin: 10px 0;
+            padding-left: 20px;
+        }
+
+        .instructions li {
+            margin: 8px 0;
+        }
+
+        .btn-print {
+            background: #667eea;
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            font-size: 16px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 20px 0;
+        }
+
+        .btn-print:hover {
+            background: #5568d3;
+        }
+
+        .warning {
+            background: #fff3cd;
+            border-left: 4px solid #ffc107;
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 5px;
+        }
+
+        .warning strong {
+            color: #856404;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>🔒 QR Codes - Tokens Permanentes</h1>
+        <p>CleanTrack - Sistema de Gestão de Conformidade</p>
+    </div>
+
+    <div class="no-print">
+        <div class="instructions">
+            <h3>📋 Instruções de Impressão</h3>
+            <ol>
+                <li><strong>Configure a impressora:</strong> Papel A4, orientação retrato</li>
+                <li><strong>Clique no botão "Imprimir" abaixo</strong></li>
+                <li><strong>Corte os QR codes</strong> com margem de segurança</li>
+                <li><strong>Cole nos equipamentos</strong> em local visível e protegido</li>
+                <li><strong>Proteja com plástico transparente</strong> para durabilidade</li>
+            </ol>
+        </div>
+
+        <div class="warning">
+            <strong>⚠️ IMPORTANTE:</strong> Estes QR codes contêm tokens permanentes.
+            Qualquer pessoa com acesso ao QR code pode registrar limpezas.
+            Guarde este documento de forma segura.
+        </div>
+
+        <center>
+            <button class="btn-print" onclick="window.print()">🖨️ Imprimir QR Codes</button>
+        </center>
+    </div>
+
+    <div class="qr-card ">
+        <h2>Desfibrilador Philips HeartStart</h2>
+        <div class="facility">📍 Hospital Central - Ala de Emergência</div>
+
+        <img src="/media/equipment_qrcodes/qr_equipment_5_Dvnbgzf.png" alt="QR Code">
+
+        <div class="info-grid">
+            <div class="info-item">
+                <strong>Número de Série</strong>
+                DF-PHILIPS-2024-001
+            </div>
+            <div class="info-item">
+                <strong>Frequência de Limpeza</strong>
+                8 horas
+            </div>
+            <div class="info-item">
+                <strong>ID do Equipamento</strong>
+                #5
+            </div>
+            <div class="info-item">
+                <strong>Status</strong>
+                ✅ Ativo
+            </div>
+        </div>
+
+        <div class="token-display">
+            <strong>🔑 Token Permanente:</strong><br>
+            IdYqlTd8wnpiXNz2HlNHWQ<br><br>
+            <strong>🔗 URL de Acesso:</strong><br>
+            http://localhost:8000/log/IdYqlTd8wnpiXNz2HlNHWQ/
+        </div>
+    </div>
+    
+    <div class="qr-card page-break">
+        <h2>Raio-X Digital Agfa</h2>
+        <div class="facility">📍 Clínica de Diagnóstico Norte</div>
+
+        <img src="/media/equipment_qrcodes/qr_equipment_6_D5wUSFp.png" alt="QR Code">
+
+        <div class="info-grid">
+            <div class="info-item">
+                <strong>Número de Série</strong>
+                RX-AGFA-2024-001
+            </div>
+            <div class="info-item">
+                <strong>Frequência de Limpeza</strong>
+                24 horas
+            </div>
+            <div class="info-item">
+                <strong>ID do Equipamento</strong>
+                #6
+            </div>
+            <div class="info-item">
+                <strong>Status</strong>
+                ✅ Ativo
+            </div>
+        </div>
+
+        <div class="token-display">
+            <strong>🔑 Token Permanente:</strong><br>
+            PbK-kiPvKSKubmmpRwHKYQ<br><br>
+            <strong>🔗 URL de Acesso:</strong><br>
+            http://localhost:8000/log/PbK-kiPvKSKubmmpRwHKYQ/
+        </div>
+    </div>
+    
+    <div class="qr-card page-break">
+        <h2>Ressonância Magnética Siemens 3T</h2>
+        <div class="facility">📍 Hospital Central - Unidade Principal</div>
+
+        <img src="/media/equipment_qrcodes/qr_equipment_3_I0ddBcj.png" alt="QR Code">
+
+        <div class="info-grid">
+            <div class="info-item">
+                <strong>Número de Série</strong>
+                RM-SIEMENS-2024-001
+            </div>
+            <div class="info-item">
+                <strong>Frequência de Limpeza</strong>
+                N/A
+            </div>
+            <div class="info-item">
+                <strong>ID do Equipamento</strong>
+                #3
+            </div>
+            <div class="info-item">
+                <strong>Status</strong>
+                ✅ Ativo
+            </div>
+        </div>
+
+        <div class="token-display">
+            <strong>🔑 Token Permanente:</strong><br>
+            2KL9xo2IyxQDBCY2pCrlzA<br><br>
+            <strong>🔗 URL de Acesso:</strong><br>
+            http://localhost:8000/log/2KL9xo2IyxQDBCY2pCrlzA/
+        </div>
+    </div>
+    
+    <div class="qr-card page-break">
+        <h2>Tomógrafo Philips 128 canais</h2>
+        <div class="facility">📍 Hospital Central - Ala de Emergência</div>
+
+        <img src="/media/equipment_qrcodes/qr_equipment_4_v3sD2SS.png" alt="QR Code">
+
+        <div class="info-grid">
+            <div class="info-item">
+                <strong>Número de Série</strong>
+                TC-PHILIPS-2024-001
+            </div>
+            <div class="info-item">
+                <strong>Frequência de Limpeza</strong>
+                N/A
+            </div>
+            <div class="info-item">
+                <strong>ID do Equipamento</strong>
+                #4
+            </div>
+            <div class="info-item">
+                <strong>Status</strong>
+                ✅ Ativo
+            </div>
+        </div>
+
+        <div class="token-display">
+            <strong>🔑 Token Permanente:</strong><br>
+            UxB2T34V3ZtsQcV3DWWUgw<br><br>
+            <strong>🔗 URL de Acesso:</strong><br>
+            http://localhost:8000/log/UxB2T34V3ZtsQcV3DWWUgw/
+        </div>
+    </div>
+    
+    <div class="qr-card page-break">
+        <h2>Ultrassom GE LOGIQ P9</h2>
+        <div class="facility">📍 Hospital Central - Unidade Principal</div>
+
+        <img src="/media/equipment_qrcodes/qr_equipment_2_VxXruU3.png" alt="QR Code">
+
+        <div class="info-grid">
+            <div class="info-item">
+                <strong>Número de Série</strong>
+                US-GE-2024-001
+            </div>
+            <div class="info-item">
+                <strong>Frequência de Limpeza</strong>
+                24 horas
+            </div>
+            <div class="info-item">
+                <strong>ID do Equipamento</strong>
+                #2
+            </div>
+            <div class="info-item">
+                <strong>Status</strong>
+                ✅ Ativo
+            </div>
+        </div>
+
+        <div class="token-display">
+            <strong>🔑 Token Permanente:</strong><br>
+            njQvH7zZdPKh9w4aObhmBw<br><br>
+            <strong>🔗 URL de Acesso:</strong><br>
+            http://localhost:8000/log/njQvH7zZdPKh9w4aObhmBw/
+        </div>
+    </div>
+    
+    <div class="no-print" style="text-align: center; margin-top: 40px; padding: 20px; background: white; border-radius: 10px;">
+        <h3>✅ Documento Gerado com Sucesso</h3>
+        <p>Total de QR codes: 5</p>
+        <p>Data de geração: 21/11/2025 20:35:46</p>
+    </div>
+</body>
+</html>

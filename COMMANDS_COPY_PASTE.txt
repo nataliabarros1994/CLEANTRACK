@@ -1,0 +1,214 @@
+═══════════════════════════════════════════════════════════════════
+  COMANDOS PRONTOS PARA COPIAR E COLAR - WEBHOOK STRIPE
+═══════════════════════════════════════════════════════════════════
+
+📋 COPIE E COLE OS COMANDOS ABAIXO EM SEQUÊNCIA
+
+
+═══════════════════════════════════════════════════════════════════
+TERMINAL 1 - SERVIDOR DJANGO
+═══════════════════════════════════════════════════════════════════
+
+cd /home/nataliabarros1994/Desktop/CleanTrack
+docker-compose up
+
+
+═══════════════════════════════════════════════════════════════════
+TERMINAL 2 - STRIPE LISTENER (aguarde Terminal 1 estar rodando)
+═══════════════════════════════════════════════════════════════════
+
+# Login (apenas primeira vez)
+stripe login
+
+# Iniciar listener
+stripe listen --forward-to localhost:8000/billing/webhook/stripe/
+
+📝 AÇÃO REQUERIDA:
+   → COPIE o "whsec_..." que aparecer na tela
+   → Guarde para o próximo passo
+
+
+═══════════════════════════════════════════════════════════════════
+ATUALIZAR O .env
+═══════════════════════════════════════════════════════════════════
+
+nano .env
+
+# Encontre a linha:
+STRIPE_WEBHOOK_SECRET=whsec_...
+
+# Substitua por (cole o secret que você copiou):
+STRIPE_WEBHOOK_SECRET=whsec_COLE_AQUI_O_SECRET_COPIADO
+
+# Salvar: Ctrl+O, Enter, Ctrl+X
+
+
+═══════════════════════════════════════════════════════════════════
+REINICIAR SERVIDOR (volte ao Terminal 1)
+═══════════════════════════════════════════════════════════════════
+
+# Pressione Ctrl+C no Terminal 1
+
+# Depois execute:
+docker-compose restart web
+
+
+═══════════════════════════════════════════════════════════════════
+TERMINAL 3 - TESTAR WEBHOOKS
+═══════════════════════════════════════════════════════════════════
+
+# Teste 1: Checkout completo
+stripe trigger checkout.session.completed
+
+# Teste 2: Pagamento bem-sucedido
+stripe trigger invoice.payment_succeeded
+
+# Teste 3: Subscription deletada
+stripe trigger customer.subscription.deleted
+
+# Teste 4: Pagamento falhado
+stripe trigger invoice.payment_failed
+
+# Teste 5: Subscription criada
+stripe trigger customer.subscription.created
+
+# Teste 6: Subscription atualizada
+stripe trigger customer.subscription.updated
+
+# Teste 7: Trial expirando
+stripe trigger customer.subscription.trial_will_end
+
+# Teste 8: Reembolso
+stripe trigger charge.refunded
+
+
+═══════════════════════════════════════════════════════════════════
+VERIFICAR LOGS
+═══════════════════════════════════════════════════════════════════
+
+# Ver logs em tempo real (novo terminal)
+tail -f logs/cleantrack.log | grep billing
+
+# Ou logs do Docker
+docker-compose logs -f web | grep billing
+
+
+═══════════════════════════════════════════════════════════════════
+VERIFICAR NO ADMIN
+═══════════════════════════════════════════════════════════════════
+
+# Abra no navegador:
+http://localhost:8000/admin/facilities/facility/
+
+# Login:
+Email: (seu superuser)
+Password: (sua senha)
+
+# Verifique se facilities estão sendo criadas/ativadas
+
+
+═══════════════════════════════════════════════════════════════════
+COMANDOS ÚTEIS
+═══════════════════════════════════════════════════════════════════
+
+# Ver status do Stripe CLI
+stripe --version
+
+# Ver eventos recentes no Stripe
+stripe logs tail
+
+# Ver eventos filtrados
+stripe logs tail --filter-event-type checkout.session.completed
+
+# Verificar se servidor está rodando
+curl http://localhost:8000
+
+# Ver todas as facilities no banco
+docker-compose exec web python manage.py shell
+>>> from apps.facilities.models import Facility
+>>> Facility.objects.all()
+>>> exit()
+
+
+═══════════════════════════════════════════════════════════════════
+ATALHOS PARA FACILITAR SUA VIDA
+═══════════════════════════════════════════════════════════════════
+
+# Adicione ao ~/.bashrc ou ~/.zshrc:
+
+alias ct-start='cd ~/Desktop/CleanTrack && docker-compose up'
+alias ct-stop='cd ~/Desktop/CleanTrack && docker-compose down'
+alias ct-restart='cd ~/Desktop/CleanTrack && docker-compose restart web'
+alias ct-logs='cd ~/Desktop/CleanTrack && tail -f logs/cleantrack.log'
+alias ct-stripe='cd ~/Desktop/CleanTrack && stripe listen --forward-to localhost:8000/billing/webhook/stripe/'
+alias ct-test='cd ~/Desktop/CleanTrack && stripe trigger checkout.session.completed'
+
+# Depois de adicionar, execute:
+source ~/.bashrc  # ou source ~/.zshrc
+
+# Agora você pode usar:
+ct-start          # Inicia o servidor
+ct-stripe         # Inicia o listener (em outro terminal)
+ct-test           # Testa webhook
+ct-logs           # Ver logs
+
+
+═══════════════════════════════════════════════════════════════════
+SCRIPT DE TESTE AUTOMÁTICO
+═══════════════════════════════════════════════════════════════════
+
+# Testar todos os 8 eventos de uma vez
+for event in \
+  checkout.session.completed \
+  customer.subscription.created \
+  customer.subscription.updated \
+  customer.subscription.deleted \
+  invoice.payment_succeeded \
+  invoice.payment_failed \
+  customer.subscription.trial_will_end \
+  charge.refunded
+do
+  echo "Testando: $event"
+  stripe trigger $event
+  sleep 2
+done
+
+
+═══════════════════════════════════════════════════════════════════
+CHECKLIST RÁPIDO
+═══════════════════════════════════════════════════════════════════
+
+✅ Passo 1: Iniciado servidor Django (Terminal 1)
+✅ Passo 2: Executado 'stripe login'
+✅ Passo 3: Iniciado stripe listener (Terminal 2)
+✅ Passo 4: Copiado whsec_... da tela
+✅ Passo 5: Atualizado .env com o secret
+✅ Passo 6: Reiniciado servidor Django
+✅ Passo 7: Testado com 'stripe trigger' (Terminal 3)
+✅ Passo 8: Verificado logs (deve aparecer [200])
+✅ Passo 9: Verificado no admin (facility criada)
+
+
+═══════════════════════════════════════════════════════════════════
+SUCESSO!
+═══════════════════════════════════════════════════════════════════
+
+Se você viu [200] no Terminal 2 e mensagens de sucesso nos logs,
+o webhook está FUNCIONANDO! 🎉
+
+Deixe o Terminal 2 (stripe listener) rodando enquanto desenvolve.
+
+Para produção, veja: STRIPE_WEBHOOK_ACTIVATION.md (seção "Produção")
+
+
+═══════════════════════════════════════════════════════════════════
+PRECISA DE AJUDA?
+═══════════════════════════════════════════════════════════════════
+
+Consulte:
+  - WEBHOOK_QUICK_START.md         (guia rápido)
+  - STRIPE_WEBHOOK_ACTIVATION.md   (guia completo)
+  - WEBHOOK_SETUP_SUMMARY.md       (resumo)
+  - USEFUL_COMMANDS.md             (todos os comandos)
+
+═══════════════════════════════════════════════════════════════════

@@ -1,0 +1,35 @@
+[Unit]
+Description=CleanTrack Django Application
+After=network.target postgresql.service redis.service
+Requires=postgresql.service
+
+[Service]
+Type=notify
+User=cleantrack
+Group=cleantrack
+WorkingDirectory=/opt/cleantrack
+Environment="PATH=/opt/cleantrack/venv/bin"
+Environment="DJANGO_SETTINGS_MODULE=cleantrack.settings_production"
+EnvironmentFile=/opt/cleantrack/.env.production
+ExecStart=/opt/cleantrack/venv/bin/gunicorn \
+    --config /opt/cleantrack/gunicorn_config.py \
+    --bind unix:/var/run/cleantrack/cleantrack.sock \
+    cleantrack.wsgi:application
+ExecReload=/bin/kill -s HUP $MAINPID
+KillMode=mixed
+TimeoutStopSec=5
+PrivateTmp=true
+Restart=always
+RestartSec=10
+
+# Security hardening
+NoNewPrivileges=true
+PrivateDevices=true
+ProtectSystem=strict
+ProtectHome=true
+ReadWritePaths=/opt/cleantrack/media /var/log/cleantrack /var/run/cleantrack
+ProtectKernelTunables=true
+ProtectControlGroups=true
+
+[Install]
+WantedBy=multi-user.target

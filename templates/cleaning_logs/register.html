@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Registrar Limpeza – {{ equipment.name }}</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://unpkg.com/htmx.org@1.9.10"></script>
+</head>
+<body class="bg-gray-50 p-4">
+  <div class="max-w-md mx-auto bg-white p-6 rounded-lg shadow">
+    <h1 class="text-xl font-bold mb-4">Registrar Limpeza</h1>
+    <p class="mb-4">Equipamento: <strong>{{ equipment.name }}</strong> ({{ equipment.serial_number }})</p>
+
+    <form method="post" enctype="multipart/form-data">
+      {% csrf_token %}
+      <div class="mb-4">
+        <label class="block text-sm font-medium mb-1">Observações (opcional)</label>
+        <textarea name="notes" class="w-full p-2 border rounded" rows="3"></textarea>
+      </div>
+
+      <div class="mb-4">
+        <label class="block text-sm font-medium mb-1">Foto de comprovação (opcional)</label>
+        <input
+          type="file"
+          name="photo"
+          id="photo-input"
+          accept="image/*"
+          class="w-full p-2 border rounded"
+          onchange="previewImage(event)">
+
+        <!-- Photo Preview -->
+        <div id="photo-preview" class="mt-3 hidden">
+          <p class="text-sm text-gray-600 mb-2">Pré-visualização:</p>
+          <img id="preview-img" src="" alt="Preview" class="max-w-full h-auto rounded border">
+        </div>
+      </div>
+
+      <button type="submit" class="w-full bg-blue-600 text-white py-2 rounded hover:bg-blue-700">
+        Confirmar Limpeza
+      </button>
+    </form>
+  </div>
+
+  <script>
+    function previewImage(event) {
+      const file = event.target.files[0];
+      const preview = document.getElementById('photo-preview');
+      const previewImg = document.getElementById('preview-img');
+
+      if (file) {
+        const reader = new FileReader();
+
+        reader.onload = function(e) {
+          previewImg.src = e.target.result;
+          preview.classList.remove('hidden');
+        }
+
+        reader.readAsDataURL(file);
+      } else {
+        preview.classList.add('hidden');
+      }
+    }
+  </script>
+</body>
+</html>

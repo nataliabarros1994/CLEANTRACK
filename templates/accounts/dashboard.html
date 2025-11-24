@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - CleanTrack</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            background: #f5f7fa;
+        }
+        .header {
+            background: white;
+            padding: 20px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        .header-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        h1 {
+            color: #333;
+            font-size: 24px;
+        }
+        .user-info {
+            display: flex;
+            gap: 20px;
+            align-items: center;
+        }
+        .role-badge {
+            background: #667eea;
+            color: white;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 500;
+        }
+        .logout-btn {
+            color: #667eea;
+            text-decoration: none;
+            font-weight: 500;
+        }
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin: 30px 0;
+        }
+        .stat-card {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .stat-value {
+            font-size: 32px;
+            font-weight: bold;
+            color: #333;
+        }
+        .stat-label {
+            color: #666;
+            margin-top: 5px;
+        }
+        .overdue {
+            color: #e74c3c;
+        }
+        .recent-cleanings {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .cleaning-item {
+            padding: 15px;
+            border-bottom: 1px solid #eee;
+        }
+        .cleaning-item:last-child {
+            border-bottom: none;
+        }
+        .nav-links {
+            margin: 20px 0;
+        }
+        .nav-links a {
+            display: inline-block;
+            margin-right: 15px;
+            padding: 10px 20px;
+            background: #667eea;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+        }
+        .nav-links a:hover {
+            background: #5568d3;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <div class="header-content">
+            <h1>🏥 CleanTrack</h1>
+            <div class="user-info">
+                <span>{{ user.get_full_name }}</span>
+                <span class="role-badge">{{ user.get_role_display }}</span>
+                <a href="{% url 'logout' %}" class="logout-btn">Sair</a>
+            </div>
+        </div>
+    </div>
+
+    <div class="container">
+        <h2 style="margin-bottom: 20px;">Dashboard</h2>
+
+        <div class="nav-links">
+            <a href="{% url 'admin:index' %}">🔧 Admin</a>
+            {% if user.role == 'admin' or user.role == 'manager' %}
+            <a href="{% url 'reports' %}">📊 Relatórios</a>
+            {% endif %}
+            {% if user.role == 'admin' %}
+            <a href="{% url 'user_list' %}">👥 Usuários</a>
+            {% endif %}
+        </div>
+
+        <div class="stats">
+            <div class="stat-card">
+                <div class="stat-value">{{ total_equipment }}</div>
+                <div class="stat-label">Total de Equipamentos</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value overdue">{{ overdue_equipment }}</div>
+                <div class="stat-label">Equipamentos Atrasados</div>
+            </div>
+        </div>
+
+        <div class="recent-cleanings">
+            <h3 style="margin-bottom: 15px;">Limpezas Recentes</h3>
+            {% if recent_cleanings %}
+                {% for cleaning in recent_cleanings %}
+                <div class="cleaning-item">
+                    <strong>{{ cleaning.equipment.name }}</strong> -
+                    {{ cleaning.cleaned_at|date:"d/m/Y H:i" }}
+                    {% if cleaning.cleaned_by %}
+                    por {{ cleaning.cleaned_by.get_full_name }}
+                    {% endif %}
+                    {% if cleaning.is_compliant %}
+                    <span style="color: green;">✓ Conforme</span>
+                    {% else %}
+                    <span style="color: red;">✗ Não conforme</span>
+                    {% endif %}
+                </div>
+                {% endfor %}
+            {% else %}
+                <p style="color: #666;">Nenhuma limpeza registrada ainda.</p>
+            {% endif %}
+        </div>
+    </div>
+</body>
+</html>

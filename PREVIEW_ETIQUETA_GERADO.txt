@@ -1,0 +1,186 @@
+╔══════════════════════════════════════════════════════════════════════════════╗
+║               ✅ PREVIEW DE ETIQUETA GERADO COM SUCESSO                      ║
+╚══════════════════════════════════════════════════════════════════════════════╝
+
+
+📋 INFORMAÇÕES DA ETIQUETA
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Equipamento: Mesa Cirúrgica MS-05
+Serial:      MS-005-2024
+Facility:    Hospital Central
+Token:       _k1vB5jNIsDi0Bxu0exPTWGMkZdM4LMQTE5L7wXEnO0
+QR URL:      http://app.cleantrack.com/log/_k1vB5jNIsDi0Bxu0exPTWGMkZdM4LMQTE5L7wXEnO0/
+Validade:    5 minutos (a partir de agora)
+
+
+📁 ARQUIVO GERADO
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Nome:        label_equipment_5_preview.png
+Tamanho:     16 KB
+Dimensões:   342 x 1063 pixels
+Formato:     PNG (8-bit RGB)
+Equivalente: 29mm x 90mm @ 300 DPI
+
+
+🖼️ LAYOUT GERADO
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+┌──────────────────────────────┐
+│                              │
+│     ┌──────────────────┐     │  ← QR Code (280x280px)
+│     │                  │     │    Error Correction: High (30%)
+│     │                  │     │    Scannable: ✅
+│     │    [QR CODE]     │     │
+│     │                  │     │
+│     │                  │     │
+│     └──────────────────┘     │
+│                              │
+│   Mesa Cirúrgica MS-05       │  ← Nome (DejaVuSans-Bold 28pt)
+│                              │
+│    SN: MS-005-2024           │  ← Serial (DejaVuSans 20pt)
+│                              │
+│    Hospital Central          │  ← Facility (DejaVuSans 18pt)
+│                              │
+│  Escaneie para registrar     │  ← Instruções (DejaVuSans 14pt, cinza)
+│                              │
+│  ──────────────────────────  │  ← Linha separadora
+│                              │
+│                              │
+└──────────────────────────────┘
+     29mm x 90mm (342x1063px)
+
+
+✅ PRÓXIMOS PASSOS
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+1. VISUALIZAR PREVIEW:
+
+   # Linux:
+   xdg-open label_equipment_5_preview.png
+
+   # macOS:
+   open label_equipment_5_preview.png
+
+   # Windows:
+   start label_equipment_5_preview.png
+
+
+2. IMPRIMIR EM IMPRESSORA BROTHER QL (Quando disponível):
+
+   # Instalar dependências:
+   pip install brother-ql pillow qrcode
+
+   # Configurar permissões USB (Linux):
+   sudo usermod -a -G lp $USER
+   newgrp lp
+
+   # Conectar impressora Brother QL-800/810/820
+
+   # Imprimir:
+   python utils/print_labels.py 5
+
+
+3. GERAR MAIS ETIQUETAS:
+
+   # Equipamento ID 1:
+   python manage.py shell -c "from utils.print_labels import save_preview; save_preview(1, 'label_1.png')"
+
+   # Equipamento ID 2:
+   python manage.py shell -c "from utils.print_labels import save_preview; save_preview(2, 'label_2.png')"
+
+   # Ou via script (requer brother_ql):
+   python utils/print_labels.py 1 --preview label_1.png
+
+
+🧪 TESTAR QR CODE
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+1. Abrir preview: label_equipment_5_preview.png
+
+2. Escanear QR code com smartphone
+
+3. Deve abrir URL:
+   http://app.cleantrack.com/log/_k1vB5jNIsDi0Bxu0exPTWGMkZdM4LMQTE5L7wXEnO0/
+
+4. Em produção, ajuste URL:
+   python utils/print_labels.py 5 --url https://cleantrack.seudominio.com
+
+
+📊 ESPECIFICAÇÕES TÉCNICAS
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+┌────────────────────────┬───────────────────────────────┐
+│ Propriedade            │ Valor                         │
+├────────────────────────┼───────────────────────────────┤
+│ Largura física         │ 29mm                          │
+│ Altura física          │ 90mm                          │
+│ Resolução              │ 300 DPI                       │
+│ Largura (pixels)       │ 342px                         │
+│ Altura (pixels)        │ 1063px                        │
+│ QR Code                │ 280x280px                     │
+│ Error Correction       │ High (30% recuperável)        │
+│ Formato de saída       │ PNG RGB                       │
+│ Tamanho do arquivo     │ 16 KB                         │
+│ Cores                  │ Preto, branco, cinza          │
+│ Fonte principal        │ DejaVuSans-Bold               │
+│ Fonte secundária       │ DejaVuSans                    │
+└────────────────────────┴───────────────────────────────┘
+
+
+🎯 INFORMAÇÕES DO TOKEN
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Token:        _k1vB5jNIsDi0Bxu0exPTWGMkZdM4LMQTE5L7wXEnO0
+Tipo:         HMAC-SHA256
+Validade:     5 minutos (300 segundos)
+Gerado em:    2025-11-23 15:54
+Expira em:    2025-11-23 15:59
+Status:       ✅ Válido (se dentro dos 5 minutos)
+
+⚠️  IMPORTANTE: Token expira 5 minutos após geração do preview!
+   Para impressão real, gere novo token com o script.
+
+
+📚 DOCUMENTAÇÃO
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Documentação completa:   IMPRESSAO_ETIQUETAS_TERMICAS.md
+Guia rápido:             GUIA_RAPIDO_IMPRESSAO.txt
+Script:                  utils/print_labels.py
+
+
+💡 DICAS
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+✓ Preview é útil para verificar layout antes de imprimir
+✓ QR code tem alta correção de erro (funciona mesmo se danificado 30%)
+✓ Etiqueta térmica não requer tinta (impressora térmica)
+✓ Tamanho 29mm x 90mm é padrão para Brother QL-800
+✓ Gere novo token antes de imprimir (tokens expiram em 5 min)
+
+
+🖨️ IMPRESSORAS COMPATÍVEIS
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+✅ Brother QL-800 (USB/Ethernet)
+✅ Brother QL-810W (USB/WiFi)
+✅ Brother QL-820NWB (USB/WiFi/Bluetooth)
+
+Outros tamanhos de etiqueta:
+• 29mm (padrão)
+• 38mm
+• 62mm
+
+
+╔══════════════════════════════════════════════════════════════════════════════╗
+║                      ✅ PREVIEW GERADO COM SUCESSO!                          ║
+║                                                                              ║
+║  Arquivo: label_equipment_5_preview.png                                     ║
+║  Equipamento: Mesa Cirúrgica MS-05                                          ║
+║  QR Code: ✅ Escaneável                                                      ║
+║  Layout: ✅ Otimizado para 29x90mm                                           ║
+║                                                                              ║
+║  Pronto para visualização e teste! 🎉                                       ║
+╚══════════════════════════════════════════════════════════════════════════════╝

@@ -1,0 +1,266 @@
+═══════════════════════════════════════════════════════════════════
+  COMANDOS RÁPIDOS DE TESTE - WEBHOOKS DO STRIPE
+═══════════════════════════════════════════════════════════════════
+
+
+🚀 TESTE RÁPIDO (1 COMANDO)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Testar ativação automática de facility:
+
+stripe trigger checkout.session.completed
+
+
+═══════════════════════════════════════════════════════════════════
+🧪 TESTAR TODOS OS 8 EVENTOS (1 SCRIPT)
+═══════════════════════════════════════════════════════════════════
+
+./test_all_webhooks.sh
+
+
+═══════════════════════════════════════════════════════════════════
+📋 TESTAR EVENTO POR EVENTO
+═══════════════════════════════════════════════════════════════════
+
+# 1. Checkout completo (cria facility)
+stripe trigger checkout.session.completed
+
+# 2. Subscription criada (ativa facility)
+stripe trigger customer.subscription.created
+
+# 3. Subscription atualizada (atualiza status)
+stripe trigger customer.subscription.updated
+
+# 4. Subscription deletada (desativa facility)
+stripe trigger customer.subscription.deleted
+
+# 5. Pagamento bem-sucedido (confirma ativa)
+stripe trigger invoice.payment_succeeded
+
+# 6. Pagamento falhado (desativa após 3x)
+stripe trigger invoice.payment_failed
+
+# 7. Trial expirando (alerta)
+stripe trigger customer.subscription.trial_will_end
+
+# 8. Reembolso (registra)
+stripe trigger charge.refunded
+
+
+═══════════════════════════════════════════════════════════════════
+🔍 VERIFICAR RESULTADOS
+═══════════════════════════════════════════════════════════════════
+
+# Ver logs em tempo real
+docker-compose logs -f web | grep billing
+
+# Ver últimos eventos processados
+docker-compose logs web | grep "Handling" | tail -10
+
+# Ver status dos handlers registrados
+docker-compose logs web | grep "Registering Stripe webhook handler"
+
+# Contar eventos processados
+docker-compose logs web | grep -c "Handling"
+
+
+═══════════════════════════════════════════════════════════════════
+💾 VERIFICAR NO BANCO DE DADOS
+═══════════════════════════════════════════════════════════════════
+
+# Abrir shell Django
+docker-compose exec web python manage.py shell
+
+# Comandos no shell:
+from apps.facilities.models import Facility
+
+# Contar facilities
+Facility.objects.count()
+
+# Listar todas
+for f in Facility.objects.all():
+    print(f"{f.id}: {f.name} - Active: {f.is_active} - Customer: {f.stripe_customer_id}")
+
+# Ver facilities ativas
+Facility.objects.filter(is_active=True).count()
+
+# Ver facilities com Stripe customer
+Facility.objects.exclude(stripe_customer_id='').count()
+
+# Sair
+exit()
+
+
+═══════════════════════════════════════════════════════════════════
+🌐 VERIFICAR NO ADMIN
+═══════════════════════════════════════════════════════════════════
+
+# Abrir no navegador:
+http://localhost:8000/admin/facilities/facility/
+
+# Login:
+Email: (seu superuser)
+Password: (sua senha)
+
+# Verificar:
+✓ Facilities criadas
+✓ is_active = True (após checkout)
+✓ stripe_customer_id preenchido
+
+
+═══════════════════════════════════════════════════════════════════
+🧹 LIMPAR DADOS DE TESTE
+═══════════════════════════════════════════════════════════════════
+
+# Remover todas as facilities
+docker-compose exec web python manage.py shell
+
+from apps.facilities.models import Facility
+Facility.objects.all().delete()
+print("✓ Todas as facilities removidas")
+exit()
+
+
+═══════════════════════════════════════════════════════════════════
+🎯 CENÁRIOS DE TESTE ESPECÍFICOS
+═══════════════════════════════════════════════════════════════════
+
+CENÁRIO 1: Novo cliente assina plano
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+stripe trigger checkout.session.completed
+stripe trigger customer.subscription.created
+
+# Resultado: Facility ativa com stripe_customer_id
+
+
+CENÁRIO 2: Pagamento mensal bem-sucedido
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+stripe trigger invoice.payment_succeeded
+
+# Resultado: Facility continua ativa
+
+
+CENÁRIO 3: Falha de pagamento e recuperação
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+stripe trigger invoice.payment_failed
+stripe trigger invoice.payment_failed
+stripe trigger invoice.payment_succeeded
+
+# Resultado: Facility continua ativa, contador resetado
+
+
+CENÁRIO 4: Cliente cancela assinatura
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+stripe trigger customer.subscription.deleted
+
+# Resultado: Facility desativada (is_active = False)
+
+
+CENÁRIO 5: 3 falhas consecutivas
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+stripe trigger invoice.payment_failed
+stripe trigger invoice.payment_failed
+stripe trigger invoice.payment_failed
+
+# Resultado: Facility desativada após 3ª falha
+
+
+═══════════════════════════════════════════════════════════════════
+📊 VERIFICAÇÕES ESPERADAS
+═══════════════════════════════════════════════════════════════════
+
+NO TERMINAL DO STRIPE LISTENER:
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+[200] POST /billing/webhook/stripe/ [evt_xxxx]
+
+✅ Deve retornar 200 para cada evento
+
+
+NOS LOGS DO DJANGO:
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+INFO apps.billing.webhook_handlers: Handling checkout.session.completed
+INFO apps.billing.webhook_handlers: Facility activated after successful checkout
+INFO apps.notifications.services: Welcome email sent to user@example.com
+
+✅ Eventos processados com sucesso
+✅ Ações executadas (facility ativada, email enviado)
+
+
+NO ADMIN DJANGO:
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+✅ Facilities criadas
+✅ stripe_customer_id preenchido (cus_xxxxx)
+✅ is_active = True (após checkout)
+✅ is_active = False (após subscription deleted)
+
+
+═══════════════════════════════════════════════════════════════════
+🔧 TROUBLESHOOTING
+═══════════════════════════════════════════════════════════════════
+
+ERRO: [400] Bad Request
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+# Verificar webhook secret
+grep STRIPE_WEBHOOK_SECRET .env
+
+# Reiniciar container
+docker-compose restart web
+
+
+ERRO: [404] Not Found
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+# Testar rota
+curl -X POST http://localhost:8000/billing/webhook/stripe/
+
+
+ERRO: [500] Internal Server Error
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+# Ver erro completo
+docker-compose logs web | tail -50
+
+
+Evento recebido mas nada acontece
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+# Verificar handlers registrados
+docker-compose logs web | grep "Registering Stripe webhook handler"
+
+# Deve mostrar 8 linhas
+
+
+═══════════════════════════════════════════════════════════════════
+📚 DOCUMENTAÇÃO COMPLETA
+═══════════════════════════════════════════════════════════════════
+
+Para guia detalhado, abra:
+
+TEST_WEBHOOKS_GUIDE.md         - Guia completo de testes
+WEBHOOK_QUICK_START.md         - Setup rápido
+STRIPE_DASHBOARD_SETUP.md      - Configuração do dashboard
+COMMANDS_COPY_PASTE.txt        - Todos os comandos
+
+
+═══════════════════════════════════════════════════════════════════
+✨ DICA PRO
+═══════════════════════════════════════════════════════════════════
+
+Monitore tudo em 3 terminais:
+
+TERMINAL 1: Stripe Listener
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+stripe listen --forward-to localhost:8000/billing/webhook/stripe/
+
+
+TERMINAL 2: Logs Django em tempo real
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+docker-compose logs -f web | grep -E "(billing|notifications)"
+
+
+TERMINAL 3: Executar testes
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+stripe trigger checkout.session.completed
+
+
+Assim você vê tudo acontecendo em tempo real! 🎯
+
+
+═══════════════════════════════════════════════════════════════════

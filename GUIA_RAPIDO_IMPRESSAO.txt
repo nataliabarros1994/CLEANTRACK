@@ -1,0 +1,222 @@
+╔══════════════════════════════════════════════════════════════════════════════╗
+║            🖨️ GUIA RÁPIDO - IMPRESSÃO DE ETIQUETAS TÉRMICAS                ║
+║                        Brother QL-800/810/820                                ║
+╚══════════════════════════════════════════════════════════════════════════════╝
+
+
+⚡ INSTALAÇÃO RÁPIDA (5 MINUTOS)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+1. Instalar dependências:
+
+   pip install brother-ql pillow qrcode
+
+
+2. Configurar permissões USB (Linux):
+
+   sudo usermod -a -G lp $USER
+   newgrp lp
+
+
+3. Conectar impressora Brother QL-800 via USB
+
+
+4. Testar:
+
+   python utils/print_labels.py --list
+
+
+✅ PRONTO! Se listar a impressora, pode imprimir.
+
+
+📖 USO BÁSICO
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+# Imprimir etiqueta para equipamento ID 1:
+python utils/print_labels.py 1
+
+# Listar impressoras disponíveis:
+python utils/print_labels.py --list
+
+# Gerar preview sem imprimir:
+python utils/print_labels.py 1 --preview label.png
+
+
+🎯 COMANDOS ÚTEIS
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Imprimir com impressora específica:
+python utils/print_labels.py 5 --printer usb://0x04f9:0x2015
+
+Usar modelo diferente:
+python utils/print_labels.py 3 --model QL-810
+
+Tamanho de etiqueta diferente:
+python utils/print_labels.py 7 --size 38
+
+URL personalizada (produção):
+python utils/print_labels.py 2 --url https://cleantrack.seudominio.com
+
+Ver ajuda completa:
+python utils/print_labels.py --help
+
+
+🖼️ LAYOUT DA ETIQUETA (29mm x 90mm)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+┌──────────────────┐
+│                  │
+│  ┌──────────┐    │  QR Code (280x280px)
+│  │          │    │  Error correction: High
+│  │ QR CODE  │    │
+│  │          │    │
+│  └──────────┘    │
+│                  │
+│ Desfibrilador XYZ│  Nome (centralizado)
+│                  │
+│ SN: DEF-001-2025 │  Serial (centralizado)
+│                  │
+│ Hospital Central │  Facility (centralizado)
+│                  │
+│ Escaneie para    │  Instruções (cinza)
+│ registrar        │
+│                  │
+│ ────────────────│  Linha separadora
+│                  │
+│ [CleanTrack Logo]│  Logo (opcional)
+│                  │
+└──────────────────┘
+   29mm x 90mm
+
+
+📦 IMPRESSÃO EM LOTE
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+# Bash script:
+for id in 1 2 3 4 5; do
+    python utils/print_labels.py $id
+    sleep 2
+done
+
+
+🔧 TROUBLESHOOTING
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Problema: "No module named 'brother_ql'"
+Solução: pip install brother-ql pillow qrcode
+
+Problema: "Permission denied" USB
+Solução: sudo usermod -a -G lp $USER && newgrp lp
+
+Problema: "Nenhuma impressora encontrada"
+Solução:
+  1. Verificar USB: lsusb | grep Brother
+  2. Reinstalar CUPS: sudo apt-get install cups
+  3. Reiniciar: sudo systemctl restart cups
+
+Problema: "Font not found"
+Solução: sudo apt-get install fonts-dejavu
+
+
+🖼️ LOGO OPCIONAL
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Para adicionar logo CleanTrack nas etiquetas:
+
+1. Criar PNG preto/branco (300x90px):
+   static/logo/cleantrack-logo-thermal.png
+
+2. Logo aparece automaticamente no rodapé
+
+
+🌐 CONFIGURAÇÃO DE URL
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Desenvolvimento:
+python utils/print_labels.py 1 --url http://localhost:8001
+
+Produção:
+python utils/print_labels.py 1 --url https://cleantrack.seudominio.com
+
+
+📊 O QUE FAZ O SCRIPT
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+1. Busca equipamento no banco de dados
+2. Gera novo token (válido por 5 minutos)
+3. Cria QR code com URL do sistema
+4. Monta layout da etiqueta (nome, serial, facility)
+5. Adiciona logo (se disponível)
+6. Envia para impressora Brother QL
+7. Imprime etiqueta térmica
+
+
+✅ CHECKLIST PRÉ-IMPRESSÃO
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+□ Dependências instaladas (pip install...)
+□ Permissões USB configuradas (usermod -a -G lp)
+□ Impressora Brother QL conectada
+□ Rolo de etiquetas 29mm instalado
+□ Impressora ligada
+□ Listar impressoras funciona (--list)
+□ Preview gerado com sucesso (--preview)
+□ Equipamento existe no banco (ID válido)
+
+
+🎯 EXEMPLO COMPLETO
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+# 1. Verificar conexão da impressora
+lsusb | grep Brother
+# Saída: Bus 001 Device 005: ID 04f9:2015 Brother Industries, Ltd
+
+# 2. Listar impressoras disponíveis
+python utils/print_labels.py --list
+# Saída: 🖨️  Impressoras Brother QL encontradas:
+#           1. usb://0x04f9:0x2015
+
+# 3. Gerar preview
+python utils/print_labels.py 1 --preview test.png
+# Saída: ✅ Preview salvo em: test.png
+
+# 4. Abrir preview
+xdg-open test.png
+
+# 5. Imprimir etiqueta
+python utils/print_labels.py 1
+# Saída: ✅ Etiqueta impressa com sucesso!
+#        Equipamento: Desfibrilador XYZ
+#        Serial: DEF-001-2025
+#        Facility: Hospital Central
+#        QR URL: http://app.cleantrack.com/log/abc123/
+#        Token válido por: 5 minutos
+
+
+📚 DOCUMENTAÇÃO COMPLETA
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Ver: IMPRESSAO_ETIQUETAS_TERMICAS.md
+
+
+📁 ARQUIVOS
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+utils/print_labels.py - Script principal
+utils/__init__.py - Package Python
+IMPRESSAO_ETIQUETAS_TERMICAS.md - Documentação completa
+GUIA_RAPIDO_IMPRESSAO.txt - Este arquivo
+
+
+🚀 PRONTO PARA USO!
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+1. Instale dependências
+2. Configure permissões
+3. Conecte impressora
+4. Execute: python utils/print_labels.py 1
+
+
+╔══════════════════════════════════════════════════════════════════════════════╗
+║                        ✅ BOA IMPRESSÃO! 🖨️                                 ║
+╚══════════════════════════════════════════════════════════════════════════════╝

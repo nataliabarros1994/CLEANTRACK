@@ -1,0 +1,58 @@
+{% extends "emails/base_email.html" %}
+
+{% block title %}Cleaning Overdue Alert - Action Required{% endblock %}
+
+{% block content %}
+<h2>⚠️ Cleaning Overdue - Action Required</h2>
+
+<p>Hi {{ user_name }},</p>
+
+<p>This is an urgent notification about overdue equipment cleaning at {{ location_name }}.</p>
+
+<div class="warning-box">
+    <strong>Equipment Overdue for Cleaning</strong><br>
+    Equipment: {{ equipment_name }}<br>
+    Serial Number: {{ serial_number }}<br>
+    Location: {{ location_name }}<br>
+    Last Cleaned: {{ last_cleaned_date }}<br>
+    <strong style="color: #dc2626;">Overdue By: {{ overdue_hours }} hours</strong>
+</div>
+
+<h3>Why This Matters:</h3>
+<p>Regular cleaning of medical equipment is essential for:</p>
+<ul>
+    <li>Patient safety and infection control</li>
+    <li>Regulatory compliance (CDC, Joint Commission)</li>
+    <li>Equipment longevity and performance</li>
+    <li>Avoiding potential fines and violations</li>
+</ul>
+
+<a href="{{ equipment_url }}" class="button">Log Cleaning Now</a>
+
+<div class="divider"></div>
+
+<h3>Cleaning Protocol:</h3>
+<p><strong>{{ protocol_name }}</strong></p>
+<ul>
+    {% for step in protocol_steps %}
+    <li>{{ step }}</li>
+    {% endfor %}
+</ul>
+
+<div class="info-box">
+    <strong>Estimated Time:</strong> {{ estimated_duration }} minutes<br>
+    <strong>Required Chemicals:</strong> {{ required_chemicals|join:", " }}
+</div>
+
+<p>Please complete this cleaning as soon as possible to maintain compliance.</p>
+
+<p>If you have questions or need assistance, please contact your facility manager or reply to this email.</p>
+
+<p>Best regards,<br>
+The CleanTrack Team</p>
+
+<p style="font-size: 12px; color: #6b7280; margin-top: 30px;">
+    Alert ID: {{ alert_id }}<br>
+    Generated: {{ timestamp }}
+</p>
+{% endblock %}

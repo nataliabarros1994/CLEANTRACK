@@ -1,0 +1,180 @@
+═══════════════════════════════════════════════════════════════
+                    CLEANTRACK - QUICK START
+═══════════════════════════════════════════════════════════════
+
+📦 SIMPLIFIED DOCKER SETUP
+   - 2 services: web (Django) + db (PostgreSQL)
+   - Fast startup, minimal resources
+   - Perfect for development
+
+═══════════════════════════════════════════════════════════════
+                    🚀 START PROJECT (3 STEPS)
+═══════════════════════════════════════════════════════════════
+
+STEP 1: START SERVICES
+------------------------
+cd /home/nataliabarros1994/Desktop/CleanTrack
+docker-compose up --build
+
+
+STEP 2: SETUP DATABASE (in another terminal)
+---------------------------------------------
+docker-compose exec web python manage.py migrate
+docker-compose exec web python manage.py createsuperuser
+docker-compose exec web python manage.py create_demo_data
+
+
+STEP 3: ACCESS APPLICATION
+---------------------------
+🌍 Homepage:  http://localhost:8000
+🔐 Admin:     http://localhost:8000/admin
+
+═══════════════════════════════════════════════════════════════
+                    📊 DOCKER CONFIGURATION
+═══════════════════════════════════════════════════════════════
+
+Dockerfile:
+-----------
+FROM python:3.11-slim
+WORKDIR /app
+- Install PostgreSQL client (libpq-dev)
+- Install Python dependencies
+- Copy project files
+- Expose port 8000
+- Run: python manage.py runserver 0.0.0.0:8000
+
+docker-compose.yml:
+-------------------
+services:
+  web:
+    - Build from Dockerfile
+    - Port: 8000
+    - Volume mount: .:/app (live reload)
+    - Environment: from .env file
+
+  db:
+    - Image: postgres:15
+    - Port: 5432
+    - Database: cleantrack
+    - User: cleantrack_user
+    - Password: secure_password_123
+
+═══════════════════════════════════════════════════════════════
+                    🔧 USEFUL COMMANDS
+═══════════════════════════════════════════════════════════════
+
+START PROJECT:
+   docker-compose up
+
+START IN BACKGROUND:
+   docker-compose up -d
+
+VIEW LOGS:
+   docker-compose logs -f web
+
+STOP PROJECT:
+   docker-compose down
+
+REBUILD CONTAINERS:
+   docker-compose up --build
+
+RESET EVERYTHING (WARNING: DELETES DATA):
+   docker-compose down -v
+   docker-compose up --build
+
+RUN DJANGO COMMANDS:
+   docker-compose exec web python manage.py [command]
+
+EXAMPLES:
+   docker-compose exec web python manage.py migrate
+   docker-compose exec web python manage.py createsuperuser
+   docker-compose exec web python manage.py shell
+   docker-compose exec web python manage.py create_demo_data
+
+ACCESS DATABASE:
+   docker-compose exec db psql -U cleantrack_user -d cleantrack
+
+═══════════════════════════════════════════════════════════════
+                    🗄️ DATABASE CONNECTION
+═══════════════════════════════════════════════════════════════
+
+FROM INSIDE DOCKER:
+   Host: db
+   Port: 5432
+   Database: cleantrack
+   User: cleantrack_user
+   Password: secure_password_123
+   URL: postgres://cleantrack_user:secure_password_123@db:5432/cleantrack
+
+FROM HOST MACHINE:
+   Host: localhost
+   Port: 5432
+   Database: cleantrack
+   User: cleantrack_user
+   Password: secure_password_123
+   URL: postgres://cleantrack_user:secure_password_123@localhost:5432/cleantrack
+
+═══════════════════════════════════════════════════════════════
+                    👥 DEMO CREDENTIALS
+═══════════════════════════════════════════════════════════════
+
+After running: docker-compose exec web python manage.py create_demo_data
+
+ADMIN USER:
+   Email: demo.admin@cleantrack.app
+   Password: demo123
+   Role: Account Owner
+
+TECHNICIAN USER:
+   Email: demo.technician@cleantrack.app
+   Password: demo123
+   Role: Technician
+
+DEMO DATA INCLUDES:
+   ✓ 1 Account (Demo Hospital)
+   ✓ 2 Locations (Main Building, ICU Wing)
+   ✓ 4 Equipment items
+   ✓ 2 Cleaning logs
+   ✓ 3 Compliance alerts
+
+═══════════════════════════════════════════════════════════════
+                    ⚠️ NOTES
+═══════════════════════════════════════════════════════════════
+
+SIMPLIFIED SETUP:
+   ✅ Django web app
+   ✅ PostgreSQL database
+   ✅ Admin interface
+   ✅ All CRUD operations
+
+   ❌ Background tasks (no Celery)
+   ❌ Automated alerts (no Celery Beat)
+   ❌ Email notifications (no async processing)
+
+If you need background tasks, see: DOCKER_SETUP_NOTE.md
+
+═══════════════════════════════════════════════════════════════
+                    🔍 TROUBLESHOOTING
+═══════════════════════════════════════════════════════════════
+
+PORT 8000 ALREADY IN USE:
+   sudo lsof -ti:8000 | xargs kill -9
+   docker-compose up
+
+CONTAINERS NOT STARTING:
+   docker-compose down
+   docker-compose up --build
+
+DATABASE CONNECTION ERROR:
+   docker-compose restart db
+   docker-compose logs db
+
+PYTHON DEPENDENCIES ERROR:
+   docker-compose build --no-cache
+   docker-compose up
+
+═══════════════════════════════════════════════════════════════
+
+Ready to start! Run: docker-compose up --build
+
+═══════════════════════════════════════════════════════════════

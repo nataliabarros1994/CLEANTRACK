@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CleanTrack – Conformidade Médica Automatizada</title>
+  <meta name="description" content="Automatize registros de limpeza de equipamentos médicos. Evite multas. Pronto para auditoria em 1 clique.">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <style>
+    :root {
+      --cleantrack-blue: #3498db;
+      --cleantrack-green: #27ae60;
+      --dark-gray: #2c3e50;
+    }
+    body { font-family: 'Segoe UI', system-ui; color: var(--dark-gray); }
+    .hero { background: linear-gradient(135deg, #f8f9fa 0%, #e8f4fc 100%); min-height: 100vh; display: flex; align-items: center; }
+    .btn-primary { background-color: var(--cleantrack-blue); border: none; }
+    .btn-success { background-color: var(--cleantrack-green); border: none; }
+    .feature-icon { width: 50px; height: 50px; background: var(--cleantrack-blue); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; font-weight: bold; }
+    footer { background: var(--dark-gray); color: white; padding: 20px 0; }
+    .calendly-inline-widget { min-width: 100%; height: 400px; }
+  </style>
+</head>
+<body>
+
+<!-- Hero Section -->
+<section class="hero py-5">
+  <div class="container">
+    <div class="row align-items-center">
+      <div class="col-lg-6 mb-4 mb-lg-0">
+        <h1 class="display-4 fw-bold">Garantindo conformidade médica,<br>uma limpeza de cada vez.</h1>
+        <p class="lead mt-3">Automatize registros de limpeza de equipamentos médicos. Evite multas regulatórias. Esteja sempre pronto para auditorias.</p>
+        <div class="d-flex gap-2 mt-4">
+          <a href="#piloto" class="btn btn-success btn-lg">Teste Grátis (3 meses)</a>
+          <a href="https://youtu.be/demo-cleantrack" class="btn btn-outline-secondary btn-lg">Assistir Demo</a>
+        </div>
+      </div>
+      <div class="col-lg-6">
+        <div class="bg-white p-4 rounded shadow">
+          <h3 class="text-center mb-4">🚀 Onboarding Exclusivo</h3>
+          <p class="text-center">Somente <strong>10 vagas</strong> para clientes piloto.<br>Grátis por 3 meses + suporte dedicado.</p>
+          <!-- Calendly Inline Widget -->
+          <div class="calendly-inline-widget" data-url="https://calendly.com/seu-usuario/cleantrack-onboarding"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Features -->
+<section class="py-5">
+  <div class="container">
+    <div class="row text-center mb-5">
+      <h2>Como funciona?</h2>
+    </div>
+    <div class="row g-4">
+      <div class="col-md-4">
+        <div class="feature-icon mx-auto mb-3">1</div>
+        <h5>Etiquete seus equipamentos</h5>
+        <p>Receba PDF com QR codes. Cole em cada equipamento.</p>
+      </div>
+      <div class="col-md-4">
+        <div class="feature-icon mx-auto mb-3">2</div>
+        <h5>Registre com seu celular</h5>
+        <p>Técnicos escaneiam, tiram foto e enviam — em 15 segundos.</p>
+      </div>
+      <div class="col-md-4">
+        <div class="feature-icon mx-auto mb-3">3</div>
+        <h5>Esteja sempre pronto</h5>
+        <p>Dashboard em tempo real + relatórios auditáveis com 1 clique.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section id="piloto" class="bg-light py-5">
+  <div class="container">
+    <div class="row justify-content-center">
+      <div class="col-lg-8 text-center">
+        <h2>Quer ser um dos 10 primeiros?</h2>
+        <p class="lead">Preencha o formulário e entraremos em contato em até 24h.</p>
+        <form action="https://formspree.io/f/seu-form-id" method="POST" class="mt-4">
+          <div class="row g-3">
+            <div class="col-md-6">
+              <input type="text" name="nome" class="form-control" placeholder="Seu nome" required>
+            </div>
+            <div class="col-md-6">
+              <input type="email" name="email" class="form-control" placeholder="Seu e-mail" required>
+            </div>
+            <div class="col-12">
+              <input type="text" name="facility" class="form-control" placeholder="Nome da instituição" required>
+            </div>
+            <div class="col-12">
+              <input type="text" name="equipamentos" class="form-control" placeholder="Quantos equipamentos? (ex: 30)">
+            </div>
+            <div class="col-12">
+              <button type="submit" class="btn btn-success w-100">Solicitar Acesso Piloto</button>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Footer -->
+<footer>
+  <div class="container text-center">
+    <p class="mb-0">CleanTrack v1.0 • Conformidade médica automatizada</p>
+    <p class="small">© 2025 CleanTrack Medical Systems. Todos os direitos reservados.</p>
+  </div>
+</footer>
+
+<!-- Bootstrap JS -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+<!-- Calendly Widget Script -->
+<script type="text/javascript" src="https://assets.calendly.com/assets/external/widget.js" async></script>
+
+</body>
+</html>
