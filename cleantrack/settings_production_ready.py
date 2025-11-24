@@ -56,12 +56,13 @@ CSRF_TRUSTED_ORIGINS = [
 # ============================================================================
 
 # Parse database URL from environment
-DATABASE_URL = os.environ.get('DATABASE_URL', '').strip()
+DATABASE_URL = os.environ.get('DATABASE_URL', None)
 
-if DATABASE_URL and DATABASE_URL != '':
+# Only use dj_database_url if DATABASE_URL is provided and not empty
+if DATABASE_URL and DATABASE_URL.strip():
     DATABASES = {
         'default': dj_database_url.parse(
-            DATABASE_URL,
+            DATABASE_URL.strip(),
             conn_max_age=600,
             conn_health_checks=True,
         )
