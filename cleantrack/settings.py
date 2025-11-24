@@ -131,11 +131,11 @@ LOGIN_REDIRECT_URL = '/accounts/dashboard/'
 LOGOUT_REDIRECT_URL = '/accounts/login/'
 
 # Resend
-RESEND_API_KEY = config('RESEND_API_KEY')
+RESEND_API_KEY = config('RESEND_API_KEY', default='')
 
 # Stripe
 STRIPE_LIVE_SECRET_KEY = config('STRIPE_LIVE_SECRET_KEY', default="")
-STRIPE_TEST_SECRET_KEY = config('STRIPE_TEST_SECRET_KEY')
+STRIPE_TEST_SECRET_KEY = config('STRIPE_TEST_SECRET_KEY', default='')
 STRIPE_LIVE_MODE = False  # Altere em produção
 DJSTRIPE_WEBHOOK_SECRET = config('STRIPE_WEBHOOK_SECRET', default="")
 DJSTRIPE_FOREIGN_KEY_TO_FIELD = "id"
