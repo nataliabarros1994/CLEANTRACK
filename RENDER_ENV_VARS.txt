@@ -1,0 +1,109 @@
+================================================================================
+📋 VARIÁVEIS DE AMBIENTE PARA RENDER.COM
+================================================================================
+
+Configure estas variáveis no painel do Render:
+Dashboard → Web Service → Environment → Add Environment Variable
+
+================================================================================
+🔧 VARIÁVEIS OBRIGATÓRIAS
+================================================================================
+
+DJANGO_SETTINGS_MODULE=cleantrack.settings_production_ready
+
+PYTHONUNBUFFERED=1
+
+PORT=10000
+
+SECRET_KEY=<CLIQUE EM "GENERATE VALUE" NO RENDER>
+
+DATABASE_URL=<SERÁ PREENCHIDO AUTOMATICAMENTE QUANDO CONECTAR O POSTGRESQL>
+
+================================================================================
+📧 EMAIL (RESEND)
+================================================================================
+
+RESEND_API_KEY=***REMOVED***
+
+DEFAULT_FROM_EMAIL=noreply@cleantrack.com
+
+SERVER_EMAIL=server@cleantrack.com
+
+================================================================================
+💳 STRIPE (MODO TESTE)
+================================================================================
+
+STRIPE_TEST_PUBLIC_KEY=***REMOVED***
+
+STRIPE_TEST_SECRET_KEY=***REMOVED***
+
+STRIPE_LIVE_MODE=False
+
+STRIPE_WEBHOOK_SECRET=<SERÁ CONFIGURADO APÓS O DEPLOY>
+
+================================================================================
+🌐 SITE CONFIGURATION
+================================================================================
+
+SITE_URL=https://cleantrack.onrender.com
+
+ALLOWED_HOSTS=.onrender.com,cleantrack.onrender.com
+
+CSRF_TRUSTED_ORIGINS=https://*.onrender.com,https://cleantrack.onrender.com
+
+================================================================================
+🌍 LOCALE
+================================================================================
+
+LANGUAGE_CODE=en-us
+
+TIME_ZONE=America/Sao_Paulo
+
+================================================================================
+👤 ADMIN
+================================================================================
+
+ADMIN_EMAIL=natyssis23@gmail.com
+
+================================================================================
+📝 VARIÁVEIS OPCIONAIS (NÃO OBRIGATÓRIAS)
+================================================================================
+
+REDIS_URL=<DEIXE EM BRANCO SE NÃO USAR REDIS>
+
+CORS_ALLOWED_ORIGINS=<DEIXE EM BRANCO POR ENQUANTO>
+
+================================================================================
+✅ CHECKLIST DE CONFIGURAÇÃO
+================================================================================
+
+□ DJANGO_SETTINGS_MODULE configurado
+□ SECRET_KEY gerado (Generate Value)
+□ DATABASE_URL conectado (PostgreSQL do Render)
+□ RESEND_API_KEY adicionado
+□ STRIPE keys adicionadas
+□ SITE_URL configurado
+□ PORT definido como 10000
+□ PYTHONUNBUFFERED definido como 1
+
+================================================================================
+🎯 APÓS ADICIONAR TODAS AS VARIÁVEIS
+================================================================================
+
+1. Clique em "Save Changes"
+2. O Render irá automaticamente fazer re-deploy
+3. Aguarde 5-10 minutos
+4. Acesse: https://cleantrack.onrender.com/admin/
+
+================================================================================
+🔐 CREDENCIAIS INICIAIS DE ACESSO
+================================================================================
+
+Após o deploy, use o Shell do Render para criar superuser:
+
+python manage.py createsuperuser
+
+Email: natyssis23@gmail.com
+Senha: <sua senha segura>
+
+================================================================================
