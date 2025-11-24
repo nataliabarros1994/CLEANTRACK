@@ -22,8 +22,7 @@ COPY . .
 # Collect static files
 RUN python manage.py collectstatic --noinput
 
-# Expose port (Render uses PORT environment variable)
-EXPOSE ${PORT:-10000}
+EXPOSE 10000
 
 # Run Gunicorn
 CMD gunicorn cleantrack.wsgi:application --bind 0.0.0.0:${PORT:-10000}
