@@ -23,7 +23,7 @@ DATABASE_URL=<SERÁ PREENCHIDO AUTOMATICAMENTE QUANDO CONECTAR O POSTGRESQL>
 📧 EMAIL (RESEND)
 ================================================================================
 
-RESEND_API_KEY=***REMOVED***
+RESEND_API_KEY=<your_resend_api_key>
 
 DEFAULT_FROM_EMAIL=noreply@cleantrack.com
 
@@ -33,9 +33,9 @@ SERVER_EMAIL=server@cleantrack.com
 💳 STRIPE (MODO TESTE)
 ================================================================================
 
-STRIPE_TEST_PUBLIC_KEY=***REMOVED***
+STRIPE_TEST_PUBLIC_KEY=<your_stripe_test_public_key>
 
-STRIPE_TEST_SECRET_KEY=***REMOVED***
+STRIPE_TEST_SECRET_KEY=<your_stripe_test_secret_key>
 
 STRIPE_LIVE_MODE=False
 

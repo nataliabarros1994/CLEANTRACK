@@ -159,9 +159,9 @@ Veja o arquivo **RENDER_ENV_VARS.txt** para a lista completa de todas as variáv
 - PORT=10000
 - SECRET_KEY=<generate>
 - DATABASE_URL=<auto from PostgreSQL>
-- RESEND_API_KEY=***REMOVED***
-- STRIPE_TEST_PUBLIC_KEY=***REMOVED***
-- STRIPE_TEST_SECRET_KEY=***REMOVED***
+- RESEND_API_KEY=<your_resend_api_key>
+- STRIPE_TEST_PUBLIC_KEY=<your_stripe_test_public_key>
+- STRIPE_TEST_SECRET_KEY=<your_stripe_test_secret_key>
 - STRIPE_LIVE_MODE=False
 
 ---
